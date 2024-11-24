@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import { Link } from 'react-router-dom'
 import PasswordInput from '../../components/Input/PasswordInput'
+import { validEmail } from '../../utils/Helper'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -10,6 +11,16 @@ const Login = () => {
 
   const handleLogin = (e) =>{
     e.preventDefault()
+    if(!validEmail(email)){
+      setError('Please enter a valid email address')
+      return
+    }
+    if(password.trim().length===0){
+      setError('Please enter a valid password')
+      return
+    }
+    setError(null)
+    // api call for login 
   }
 
   return (
@@ -22,6 +33,8 @@ const Login = () => {
 
           <input type='text' placeholder='email' className='input-box' value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
           <PasswordInput value={password} onChange={(e)=>setPassword(e.target.value)} />
+
+          {error && <p className='text-red-500 text-xs pb-1'>{error}</p>}
 
           <button type='submit' className='btn-primary'>Login</button>
           <p className='text-sm text-center mt-4'>
